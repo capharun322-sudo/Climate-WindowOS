@@ -78,14 +78,16 @@ public class Desk extends MIDlet implements DeskCanvas.Host {
     }
 
     private void openFiles() {
-        boolean ok = false;
+        String err;
         try {
-            ok = FileApp.supported();
+            err = FileApp.check();
         } catch (Throwable t) {
-            ok = false;
+            err = String.valueOf(t);
         }
-        if (!ok) {
-            msg("Dosyalar", "Bu telefon dosya eri\u015fimini (JSR-75) desteklemiyor.");
+        if (err != null) {
+            Alert a = new Alert("Dosyalar", "Dosya eri\u015fimi a\u00e7\u0131lamad\u0131:\n" + err, null, AlertType.ERROR);
+            a.setTimeout(Alert.FOREVER);
+            display.setCurrent(a, cv);
             return;
         }
         if (files == null) {

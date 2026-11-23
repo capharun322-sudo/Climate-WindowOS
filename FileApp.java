@@ -23,6 +23,8 @@ public class FileApp implements CommandListener {
     private List list;
     private Form view;
     private String path = null; // null = list of drives
+    private FileConnection fc = null; // one connection, reused while browsing
+    private int depth = 0;
     private Vector names = new Vector();
     private Command cUp = new Command("\u00dcst klas\u00f6r", Command.BACK, 1);
     private Command cExit = new Command("Kapat", Command.SCREEN, 2);
@@ -33,19 +35,35 @@ public class FileApp implements CommandListener {
         this.onExit = onExit;
     }
 
-    /** True when the phone offers the file API. */
-    public static boolean supported() {
+    /** Returns null when the file API works, otherwise a short reason. */
+    public static String check() {
         try {
-            FileSystemRegistry.listRoots();
-            return true;
+            Enumeration e = FileSystemRegistry.listRoots();
+            if (e == null || !e.hasMoreElements()) {
+                return "S\u00fcr\u00fcc\u00fc bulunamad\u0131.";
+            }
+            return null;
         } catch (Throwable t) {
-            return false;
+            return String.valueOf(t);
         }
     }
 
     public void start() {
+        closeConn();
         path = null;
         show();
+    }
+
+    private void closeConn() {
+        if (fc != null) {
+            try {
+                fc.close();
+            } catch (Throwable t) {
+                // ignore
+            }
+            fc = null;
+        }
+        depth = 0;
     }
 
     private void fail(String msg) {
@@ -58,11 +76,12 @@ public class FileApp implements CommandListener {
         }
     }
 
+    /** Lists the drives (fc == null) or the folder fc points to. */
     private boolean show() {
         List l = new List(path == null ? "Dosyalar" : path, List.IMPLICIT);
         Vector nm = new Vector();
         try {
-            if (path == null) {
+            if (fc == null) {
                 Enumeration e = FileSystemRegistry.listRoots();
                 while (e.hasMoreElements()) {
                     String r = (String) e.nextElement();
@@ -70,31 +89,26 @@ public class FileApp implements CommandListener {
                     l.append("[S\u00fcr\u00fcc\u00fc] " + r, null);
                 }
             } else {
-                FileConnection fc = (FileConnection) Connector.open("file:///" + path, Connector.READ);
-                try {
-                    Enumeration e = fc.list();
-                    Vector dirs = new Vector();
-                    Vector files = new Vector();
-                    while (e.hasMoreElements()) {
-                        String n = (String) e.nextElement();
-                        if (n.endsWith("/")) {
-                            dirs.addElement(n);
-                        } else {
-                            files.addElement(n);
-                        }
+                Enumeration e = fc.list();
+                Vector dirs = new Vector();
+                Vector files = new Vector();
+                while (e.hasMoreElements()) {
+                    String n = (String) e.nextElement();
+                    if (n.endsWith("/")) {
+                        dirs.addElement(n);
+                    } else {
+                        files.addElement(n);
                     }
-                    for (int i = 0; i < dirs.size(); i++) {
-                        String n = (String) dirs.elementAt(i);
-                        nm.addElement(n);
-                        l.append("[Klas\u00f6r] " + n, null);
-                    }
-                    for (int i = 0; i < files.size(); i++) {
-                        String n = (String) files.elementAt(i);
-                        nm.addElement(n);
-                        l.append(n, null);
-                    }
-                } finally {
-                    fc.close();
+                }
+                for (int i = 0; i < dirs.size(); i++) {
+                    String n = (String) dirs.elementAt(i);
+                    nm.addElement(n);
+                    l.append("[Klas\u00f6r] " + n, null);
+                }
+                for (int i = 0; i < files.size(); i++) {
+                    String n = (String) files.elementAt(i);
+                    nm.addElement(n);
+                    l.append(n, null);
                 }
             }
         } catch (SecurityException se) {
@@ -116,14 +130,50 @@ public class FileApp implements CommandListener {
         return true;
     }
 
+    /** Goes into a drive or a folder. The same connection is reused, so the phone asks only once. */
+    private void enter(String n) {
+        try {
+            if (fc == null) {
+                fc = (FileConnection) Connector.open("file:///" + n, Connector.READ);
+                path = n;
+                depth = 0;
+            } else {
+                fc.setFileConnection(n);
+                path = path + n;
+                depth++;
+            }
+        } catch (SecurityException se) {
+            closeConn();
+            path = null;
+            fail("\u0130zin verilmedi.");
+            return;
+        } catch (Throwable t) {
+            fail("A\u00e7\u0131lamad\u0131: " + t);
+            return;
+        }
+        show();
+    }
+
     private void up() {
-        if (path == null) {
+        if (fc == null) {
             onExit.run();
             return;
         }
-        String p = path.substring(0, path.length() - 1); // drop trailing '/'
-        int i = p.lastIndexOf('/');
-        path = (i < 0) ? null : p.substring(0, i + 1);
+        if (depth == 0) {
+            closeConn();
+            path = null;
+            show();
+            return;
+        }
+        try {
+            fc.setFileConnection("..");
+            String p = path.substring(0, path.length() - 1);
+            path = p.substring(0, p.lastIndexOf('/') + 1);
+            depth--;
+        } catch (Throwable t) {
+            fail("A\u00e7\u0131lamad\u0131: " + t);
+            return;
+        }
         show();
     }
 
@@ -135,11 +185,11 @@ public class FileApp implements CommandListener {
     }
 
     private void open(String name) {
-        String full = path + name;
-        FileConnection fc = null;
         InputStream is = null;
+        boolean moved = false;
         try {
-            fc = (FileConnection) Connector.open("file:///" + full, Connector.READ);
+            fc.setFileConnection(name);
+            moved = true;
             long size = fc.fileSize();
             Form f = new Form(name);
             f.append("Boyut: " + size + " bayt\n");
@@ -155,8 +205,7 @@ public class FileApp implements CommandListener {
                     }
                     n += r;
                 }
-                String txt = new String(b, 0, n, "UTF-8");
-                f.append(txt);
+                f.append(new String(b, 0, n, "UTF-8"));
                 if (size > max) {
                     f.append("\n... (devam\u0131 g\u00f6sterilmiyor)");
                 }
@@ -174,8 +223,8 @@ public class FileApp implements CommandListener {
                 if (is != null) {
                     is.close();
                 }
-                if (fc != null) {
-                    fc.close();
+                if (moved) {
+                    fc.setFileConnection("..");
                 }
             } catch (Throwable t) {
                 // ignore
@@ -196,17 +245,8 @@ public class FileApp implements CommandListener {
                 return;
             }
             String n = (String) names.elementAt(i);
-            String old = path;
-            if (path == null) {
-                path = n;
-                if (!show()) {
-                    path = old;
-                }
-            } else if (n.endsWith("/")) {
-                path = path + n;
-                if (!show()) {
-                    path = old;
-                }
+            if (fc == null || n.endsWith("/")) {
+                enter(n);
             } else {
                 open(n);
             }

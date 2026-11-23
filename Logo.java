@@ -21,7 +21,7 @@ public class Logo {
         for (int i = 0; i < 2; i++) {
             int y0 = (i == 0) ? y : y + h - wh;
             // frame
-            g.setColor(0xF4F7FB);
+            g.setColor(0xDDE5EE);
             g.fillRect(x, y0, w, wh);
             g.setColor(0xB9C4D2);
             g.drawRect(x, y0, w - 1, wh - 1);
@@ -31,20 +31,20 @@ public class Logo {
             }
             // glass: light sky to deeper blue
             for (int k = 0; k < gh; k++) {
-                g.setColor(mix(0x8FD3FF, 0x1C78DD, k, gh));
+                g.setColor(mix(0x4DA6F2, 0x0B55C4, k, gh));
                 g.drawLine(gx, gy + k, gx + gw - 1, gy + k);
             }
             // soft reflection in the upper-left corner
             int rw = gw * 2 / 5;
             int rh = gh * 2 / 5;
-            g.setColor(0xBFE6FF);
+            g.setColor(0x7CC4FA);
             g.fillTriangle(gx, gy, gx + rw, gy, gx, gy + rh);
             // thin vertical bar in the middle (casement)
             int mw = fr / 3;
             if (mw < 1) {
                 mw = 1;
             }
-            g.setColor(0xF4F7FB);
+            g.setColor(0xDDE5EE);
             g.fillRect(gx + gw / 2 - mw / 2, gy, mw, gh);
         }
         // little sill under the whole logo
