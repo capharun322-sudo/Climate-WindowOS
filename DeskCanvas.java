@@ -18,8 +18,8 @@ public class DeskCanvas extends Canvas implements Runnable, CommandListener {
 
     static final int BOOT = 0, DESK = 1, SHUT = 2;
     static final int BOOT_MS = 3000;
-    static final String[] ICONS = {"Dosyalar", "Python", "Notlar", "Hesap", "Hakk\u0131nda"};
-    static final String[] MENU = {"Dosyalar", "Python", "Notlar", "Hesap makinesi", "Hakk\u0131nda", "Kapat"};
+    static final String[] ICONS = {"Dosyalar", "Python", "Notlar", "Hesap", "Hakk\u0131nda", "Asistan"};
+    static final String[] MENU = {"Dosyalar", "Python", "Notlar", "Hesap makinesi", "Hakk\u0131nda", "Asistan", "Kapat"};
 
     private Host host;
     private int state = BOOT;
@@ -160,7 +160,7 @@ public class DeskCanvas extends Canvas implements Runnable, CommandListener {
             toggleMenu();
             return;
         }
-        if (k >= Canvas.KEY_NUM1 && k <= Canvas.KEY_NUM5) {
+        if (k >= Canvas.KEY_NUM1 && k <= Canvas.KEY_NUM6) {
             menu = false;
             sel = k - Canvas.KEY_NUM1;
             repaint();
@@ -480,6 +480,14 @@ public class DeskCanvas extends Canvas implements Runnable, CommandListener {
                     g.fillRect(x + 7 + c * 7, y + 15 + r * 5, 4, 3);
                 }
             }
+        } else if (i == 5) { // assistant: speech bubble with three dots
+            g.setColor(0x7B5BD6);
+            g.fillRoundRect(x, y + 2, 32, 22, 10, 10);
+            g.fillTriangle(x + 6, y + 22, x + 6, y + 31, x + 16, y + 22);
+            g.setColor(0xFFFFFF);
+            g.fillArc(x + 6, y + 10, 5, 5, 0, 360);
+            g.fillArc(x + 14, y + 10, 5, 5, 0, 360);
+            g.fillArc(x + 22, y + 10, 5, 5, 0, 360);
         } else { // info
             g.setColor(0x2F9BFF);
             g.fillArc(x, y, 32, 32, 0, 360);

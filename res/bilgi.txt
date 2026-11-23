@@ -1,0 +1,65 @@
+# Climate asistan bilgi dosyası. Satır biçimi:  Başlık | anahtar kelimeler (boşluklu) | cevap
+# Cevapta \n = alt satır, ~ = birden çok cevap (sırayla söyler). Anahtarlar kök olabilir (döngü -> dongu).
+# --- Python ---
+print yazdırma|print yazdır ekrana yaz yazdırmak|print() ekrana yazar.\nprint("Merhaba")\nprint(2+3)\nprint("Toplam:", 5)  (virgül araya boşluk koyar)
+input (klavyeden al)|input girdi klavye klavyeden kullanıcıdan sor|input() yazıyı kullanıcıdan alır.\nad = input("Adın: ")\nSayı için:\nyas = int(input("Yaş: "))
+değişken|değişken degisken atama değer sakla|Değişken bir değer saklar.\nx = 5\nad = "Ali"\nx = x + 1\nSonra print(x) ile görürsün.
+veri türleri|tür tip int str string metin tamsayı bool mantıksal|int tam sayı (5), str yazı ("ab"), bool True/False.\nPyPhone'da ondalık sayı (1.5) yok.
+if koşul|if eğer koşul elif else değilse|if koşul:\n    yapılacak\nelif başka:\n    ...\nelse:\n    ...\nDikkat: satır sonunda : ve içeride 4 boşluk.
+for döngüsü|for döngü tekrar tekrarla|for i in range(5):\n    print(i)\n0'dan 4'e yazar. Liste için: for x in liste:
+while döngüsü|while döngü sürece iken|while koşul:\n    ...\nKoşul doğru oldukça tekrarlar. Durmazsa sonsuz döngü olur; koşulu değiştirmeyi unutma.
+break continue|break continue dur atla kır devam|break döngüyü hemen bitirir.\ncontinue o turu atlayıp sonrakine geçer.
+def fonksiyon|def fonksiyon return döndür tanımla|def topla(a, b):\n    return a + b\nprint(topla(2, 3))\nSatır sonunda : ve içeride 4 boşluk unutma.
+liste|liste list dizi eleman append ekle|a = [3, 1, 2]\na.append(9)  sona ekler\na[0]  ilk eleman\nlen(a)  eleman sayısı
+liste metotları|sort sırala pop insert remove reverse index ters|a.sort()  sıralar\na.reverse()  ters çevirir\na.pop()  sondakini çıkarır\na.insert(0, 7)  başa ekler\na.remove(3)  3'ü siler
+len|len uzunluk kaç eleman karakter|len(x) listenin eleman sayısını ya da yazının karakter sayısını verir.\nlen("abc") = 3
+yazı işlemleri|upper lower büyük küçük harf strip replace split join yazı string metin|s.upper() BÜYÜK  s.lower() küçük\ns.strip() boşlukları kırpar\ns.replace("a","b") değiştirir\ns.split(",") parçalar  ",".join(liste) birleştirir
+f-string|fstring f-string format yazı içine değişken|f"Merhaba {ad}, {x+1}"\nf harfi + tırnak, değişkenler {} içinde.
+yorum satırı|yorum diyez açıklama not satırı|# ile başlayan satır yorumdur, çalışmaz.\n# bu bir açıklama
+girinti|girinti boşluk indentation içeride|if, for, while, def satırından sonra gelen satırlar 4 boşluk içeride olmalı. Hepsinde aynı miktar kullan.
+operatörler|operatör toplama çıkarma çarpma bölme mod kalan üs|+ - * / % (kalan) // (bölüm) ** (üs)\n10 % 3 = 1,  2 ** 5 = 32\nPyPhone'da / de tam bölme yapar: 7/2 = 3
+karşılaştırma ve mantık|karşılaştırma eşit büyük küçük and or not ve veya değil mantık|== eşit mi, != eşit değil, < > <= >=\nand (ve), or (veya), not (değil)\nDikkat: atama = , karşılaştırma ==
+in operatörü|in içinde varmı bulunuyor|"a" in "kalem"  -> True\n3 in [1,2,3]  -> True\n5 not in liste
+range|range aralık sayı dizisi|range(5) = 0,1,2,3,4\nrange(1,6) = 1..5\nrange(0,10,2) = 0,2,4,6,8
+min max sum abs|min max sum abs enküçük enbüyük toplam mutlak|min(a,b) en küçük, max(a,b) en büyük\nsum(liste) toplam, abs(-5) = 5
+chr ord|chr ord ascii harfkodu|ord("A") = 65 harfin kodu.\nchr(65) = "A" kodun harfi.
+sayıya çevirme|int str çevir dönüştür sayıya yazıya|int("12") yazıyı sayı yapar, str(12) sayıyı yazı yapar.\nint(input(...)) ile girilen sayıyla işlem yaparsın.
+SyntaxError|syntaxerror syntax sözdizimi|SyntaxError: yazım hatası. Sık nedenler: satır sonunda : eksik, parantez/tırnak kapanmamış, = yerine ==.\nPyPhone hatalı satırı kırmızı gösterir.
+NameError|nameerror isim tanımlı değil|NameError: bilinmeyen isim. Değişkeni yazmadan kullandın ya da yanlış yazdın (print yerine Print gibi). Büyük-küçük harf önemli.
+TypeError|typeerror tip|TypeError: yanlış türde işlem. Mesela "5" + 3 (yazı + sayı). int() veya str() ile çevir.
+IndentationError|indentationerror girinti|Girinti hatası: if/for/while/def sonrası 4 boşluk içeride olmalı, aynı blokta hepsi aynı olmalı.
+ZeroDivisionError|zerodivisionerror sıfıra bölme|Sıfıra bölme hatası. Bölen 0 olmasın; önce if bolen != 0: ile kontrol et.
+IndexError|indexerror liste dışı sıra|IndexError: listede olmayan sırayı istedin. len(liste) kadar eleman var, son sıra len(liste)-1 .
+ValueError|valueerror değer|ValueError: değer uygun değil. Mesela int("abc"). Girileni kontrol et.
+AttributeError|attributeerror özellik metot|AttributeError: o türde o metot yok. Yazımı kontrol et (append, upper ...).
+hata aldım|hata alıyorum aldım veriyor hatayı|Hata mesajının ilk kelimesine bak (NameError, SyntaxError...) ve bana yaz, açıklayayım. Ya da "kodumu kontrol et" de, programını çalıştırıp bakarım.
+PyPhone neler yapar|pyphone destek özellik neler python sürüm|Var: print input int str bool len range list min max sum abs chr ord, if/elif/else for while def return break continue pass global, f-string, liste ve yazı metotları.\nYok: import, class, try/except, ondalık sayı, sözlük.
+hazır örnek kod|örnek şablon hazır kodlar|PyPhone ana menüsünde "Örnekler" var: 15 hazır kod (çarpım tablosu, asal sayı, fibonacci...). Birini aç, değiştirip dene.
+hata ayıklayıcı|ayıklayıcı debug düzelt kırmızı|Programda hata olunca PyPhone hatalı satırı gösterir, hatayı kırmızı altıyla işaretler. Seçenekler'den Hataya git ve Düzelt var. Buradan "kodumu kontrol et" de diyebilirsin.
+# --- Climate WindowOS ---
+başlat menüsü|başlat menü seçenekler|Seçenekler tuşu -> Başlat. # veya 0 tuşu da açar. Oklarla gez, ortadaki tuşla aç. 1-6 tuşları uygulamaları doğrudan açar.
+kapatma|kapat kapatmak çıkış kapanış|Seçenekler -> Kapat. Kapanış sesi çalar.
+açılış sesi|açılış sesi melodi değiştir|Açılış sesi res/acilis.wav dosyasıdır. GitHub'da aynı adla başka bir WAV yüklersen yeni ses olur (16 kHz, mono).
+dosya izni|izin sorma sorulmasın evet hayır|Telefon dosya erişiminde izin sorar. Telefonun Java uygulaması ayarlarında "her zaman" seçersen sormaz.
+sürüm|sürüm versiyon|Climate WindowOS 0.2 - asistan, dosya ara, kod kontrol.
+# --- sohbet ---
+selam|selam merhaba mrb slm selamlar|Merhaba! Ne yapalım?~Selam! Dosya mı arıyoruz, kod mu bakıyoruz?
+nasılsın|nasılsın naber|İyiyim, sağ ol! Sen nasılsın?
+teşekkür|teşekkür sağol eyvallah tmm tamam|Rica ederim!~Ne demek, her zaman.
+kimsin|kimsin adın kimin|Ben Climate WindowOS'un mini asistanıyım. İnterneti kullanmam, telefonun içinde çalışırım.
+yardım|yardım yapabilirsin neler komut|Şunları yaparım:\n- Dosya/ses bul: "açılış sesini bul"\n- Python soruları: "for döngüsü nedir"\n- Uygulama aç: "python aç"\n- Kodunu kontrol: "kodumu kontrol et"\n- Hesap: "25*4 kaç", saat, tarih\n- Sohbet, fıkra, bilgi
+fıkra|fıkra espri şaka güldür|Temel ile Dursun denizde yürüyormuş. Dursun: "Şu köpek balığı yüzüyor!" Temel: "Çok şey bilirsin!"~Hoca'ya sormuşlar: Dünya mı büyük, ay mı? Hoca: "Ay tabii, gece de oradan ışık veriyor, dünya veremiyor!"~Adam doktora gitmiş: "Doktor, unutkanlık çekiyorum." Doktor: "Ne zamandan beri?" Adam: "Ne zamandan beri ne?"
+söz|söz motivasyon özlü güzel|Düşen kalkar, kalkan yürür, yürüyen varır.~Her büyük iş küçük bir adımla başlar.~Hata yapmak öğrenmenin yarısıdır.
+# --- genel bilgi (çevrimdışı) ---
+türkiye başkent|türkiye başkent başkenti|Türkiye'nin başkenti Ankara.
+en yüksek dağ|dağ yüksek ağrı zirve|Türkiye'nin en yüksek dağı Ağrı Dağı, 5137 m.
+en uzun nehir|nehir ırmak kızılırmak uzun|Türkiye'nin en uzun nehri Kızılırmak (yaklaşık 1355 km).
+yıl kaç gün|yıl kaç gün artık|Bir yıl 365 gün, artık yıl 366 gün. Haftada 7 gün, yılda 12 ay.
+birim çevirme|kilometre metre santim gram kilo litre saat dakika kaç eder|1 km = 1000 m, 1 m = 100 cm, 1 kg = 1000 g, 1 saat = 60 dk, 1 dk = 60 sn, 1 gün = 24 saat.
+pi sayısı|pi sayısı daire çevre|Pi yaklaşık 3,14159. Çemberin çevresi = 2 x pi x yarıçap.
+ışık hızı|ışık hızı saniyede|Işık saniyede yaklaşık 300.000 km yol alır.
+su kaynama|su kaynama donma derece|Su deniz seviyesinde 100 derecede kaynar, 0 derecede donar.
+gökyüzü mavi|gökyüzü neden mavi|Güneş ışığındaki mavi renk atmosferde daha çok saçılır, o yüzden gökyüzü mavi görünür.
+plaka kodları|plaka kodu istanbul ankara izmir bursa|Ankara 06, İstanbul 34, İzmir 35, Bursa 16, Antalya 07, Konya 42, Adana 01.
+gezegenler|gezegen güneş sistemi büyük|Güneş sisteminde 8 gezegen var: Merkür, Venüs, Dünya, Mars, Jüpiter (en büyük), Satürn, Uranüs, Neptün.
+internet gerekli|hava durumu dolar euro döviz haber maç skor altın borsa|Bunu bilemem: telefonun internete bağlanmıyor, ben de çevrimdışıyım.

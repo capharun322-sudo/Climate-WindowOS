@@ -54,6 +54,36 @@ public class FileApp implements CommandListener {
         show();
     }
 
+    /** Opens the browser directly inside a folder such as "E:/Music/". */
+    public void goTo(String dir) {
+        closeConn();
+        try {
+            int i = dir.indexOf('/');
+            String root = dir.substring(0, i + 1);
+            fc = (FileConnection) Connector.open("file:///" + root, Connector.READ);
+            path = root;
+            depth = 0;
+            String rest = dir.substring(i + 1);
+            while (rest.length() > 0) {
+                int j = rest.indexOf('/');
+                if (j < 0) {
+                    break;
+                }
+                String seg = rest.substring(0, j + 1);
+                fc.setFileConnection(seg);
+                path = path + seg;
+                depth++;
+                rest = rest.substring(j + 1);
+            }
+        } catch (Throwable t) {
+            closeConn();
+            path = null;
+            fail("A\u00e7\u0131lamad\u0131: " + t);
+            return;
+        }
+        show();
+    }
+
     private void closeConn() {
         if (fc != null) {
             try {

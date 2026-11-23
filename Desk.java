@@ -4,13 +4,14 @@ import javax.microedition.lcdui.Display;
 import javax.microedition.midlet.MIDlet;
 
 /** Climate WindowOS: a small desktop that hosts the apps. */
-public class Desk extends MIDlet implements DeskCanvas.Host {
+public class Desk extends MIDlet implements DeskCanvas.Host, AsistanApp.Host {
     private Display display;
     private DeskCanvas cv;
     private PyApp py;
     private NotesApp notes;
     private CalcApp calc;
     private FileApp files;
+    private AsistanApp asistan;
     private Runnable back = new Runnable() {
         public void run() {
             display.setCurrent(cv);
@@ -69,8 +70,13 @@ public class Desk extends MIDlet implements DeskCanvas.Host {
                     calc = new CalcApp(display, back);
                 }
                 calc.start();
+            } else if (app == 5) {
+                if (asistan == null) {
+                    asistan = new AsistanApp(display, back, this);
+                }
+                asistan.start();
             } else if (app == 4) {
-                msg("Climate WindowOS", "S\u00fcr\u00fcm 0.1\nAlcatel i\u00e7in masa\u00fcst\u00fc.\nPython, Notlar, Hesap makinesi, Dosyalar.");
+                msg("Climate WindowOS", "S\u00fcr\u00fcm 0.2\nAlcatel i\u00e7in masa\u00fcst\u00fc.\nPython, Notlar, Hesap makinesi, Dosyalar, Asistan.");
             }
         } catch (Throwable t) {
             msg("Hata", "Uygulama a\u00e7\u0131lamad\u0131: " + t);
@@ -94,5 +100,21 @@ public class Desk extends MIDlet implements DeskCanvas.Host {
             files = new FileApp(display, back);
         }
         files.start();
+    }
+
+    public void goToFolder(String dir) {
+        try {
+            String err = FileApp.check();
+            if (err != null) {
+                msg("Dosyalar", err);
+                return;
+            }
+            if (files == null) {
+                files = new FileApp(display, back);
+            }
+            files.goTo(dir);
+        } catch (Throwable t) {
+            msg("Hata", String.valueOf(t));
+        }
     }
 }
